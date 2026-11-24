@@ -1,5 +1,5 @@
 // Service worker : garde l'appli en cache pour qu'elle s'ouvre vite, même avec une connexion faible.
-const CACHE = 'dahaa-v7';
+const CACHE = 'dahaa-v8';
 const SHELL = [
   './', 'index.html', 'css/style.css', 'manifest.webmanifest',
   'js/core.js', 'js/i18n.js', 'js/words.js', 'js/intros.js', 'js/app.js',

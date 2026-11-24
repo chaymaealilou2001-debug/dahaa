@@ -3,6 +3,7 @@
   "short_name": "Dahaa",
   "description": "Jeux de ruse et de stratégie à plusieurs, chacun sur son téléphone.",
   "lang": "fr",
+  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

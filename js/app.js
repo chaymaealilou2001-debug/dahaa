@@ -341,7 +341,8 @@ function showHome() {
         <button class="gold" id="join">${t('home.join')}</button>
       </div>
     </div>
-    <p class="muted center" style="margin-top:16px">${t('home.tip')}</p>`;
+    ${isInstalled() ? '' : `<div class="center" style="margin-top:16px"><button class="block" id="install">📲 ${t('inst.btn')}</button></div>`}`;
+  if ($('#install')) $('#install').onclick = installApp;
   const getName = () => {
     const n = cleanName($('#name').value);
     if (!$('#name').value.trim()) { toast(t('home.needName')); $('#name').focus(); return null; }
@@ -494,6 +495,33 @@ window.addEventListener('beforeunload', (e) => { if (role === 'host' && H && H.p
 // Service worker (appli installable / hors-ligne)
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+
+// ---------- Installer l'appli sur l'écran d'accueil ----------
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); installEvt = e; });
+window.addEventListener('appinstalled', () => { installEvt = null; if (screenFn === showHome && !lastView) showHome(); });
+function isInstalled() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+async function installApp() {
+  // Android / Chrome / Edge : la vraie fenêtre d'installation
+  if (installEvt) {
+    installEvt.prompt();
+    try { await installEvt.userChoice; } catch { /* ignore */ }
+    installEvt = null;
+    return;
+  }
+  const ua = navigator.userAgent;
+  const ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const inApp = /FBAN|FBAV|Instagram|WhatsApp|Snapchat|TikTok|Line\/|; wv\)/.test(ua);
+  const samsung = /SamsungBrowser/.test(ua);
+  let steps;
+  if (inApp) steps = [t('inst.inApp1'), ios ? t('inst.inAppIos') : t('inst.inAppAndroid'), t('inst.inApp3')];
+  else if (ios) steps = [t('inst.ios1'), t('inst.ios2'), t('inst.ios3')];
+  else if (samsung) steps = [t('inst.sam1'), t('inst.sam2')];
+  else steps = [t('inst.and1'), t('inst.and2'), t('inst.and3')];
+  modal(`<h2>📲 ${t('inst.btn')}</h2><ol class="psteps-plain">${steps.map((s) => `<li>${s}</li>`).join('')}</ol>`);
 }
 
 // Sans internet, l'écran d'accueil s'ouvre quand même : le mode solo marche hors-ligne.
