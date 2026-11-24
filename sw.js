@@ -1,5 +1,5 @@
 // Service worker : garde l'appli en cache pour qu'elle s'ouvre vite, même avec une connexion faible.
-const CACHE = 'dahaa-v8';
+const CACHE = 'dahaa-v9';
 const SHELL = [
   './', 'index.html', 'css/style.css', 'manifest.webmanifest',
   'js/core.js', 'js/i18n.js', 'js/words.js', 'js/intros.js', 'js/app.js',
@@ -25,8 +25,10 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(req.url);
   const ours = url.origin === location.origin || url.href.startsWith('https://unpkg.com/peerjs@');
   if (!ours) return;
+  // no-cache : on redemande toujours au serveur si le fichier a changé (mises à jour visibles tout de suite)
+  const fresh = url.origin === location.origin ? new Request(req, { cache: 'no-cache' }) : req;
   e.respondWith(
-    fetch(req).then((res) => {
+    fetch(fresh).then((res) => {
       if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); }
       return res;
     }).catch(() => caches.match(req, { ignoreSearch: true }).then((r) => r || caches.match('index.html')))
