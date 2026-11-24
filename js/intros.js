@@ -78,6 +78,7 @@ const INTROS = {
       ['30 jetons au départ. Cartes : 7, 6, 5, 4, 3, 2, 1 et −1.', '30 tokens to start. Cards: 7, 6, 5, 4, 3, 2, 1 and −1.', '30 قطعة في البداية. البطاقات: 7، 6، 5، 4، 3، 2، 1 و−1.'],
       ['On ne peut pas miser plus que les jetons du joueur le plus pauvre.', 'You can’t bet more than the poorest player’s tokens.', 'لا يمكن المراهنة بأكثر مما يملكه أفقر لاعب.'],
       ['Égalité : le plus de cartes gagne. Plus de jetons = éliminé.', 'Tie: most cards wins. No tokens left = out.', 'عند التعادل: صاحب البطاقات الأكثر يفوز. من نفدت قطعه يخرج.'],
+      ['Après 25 mains, le joueur le plus riche gagne.', 'After 25 hands, the richest player wins.', 'بعد 25 يدًا، يفوز اللاعب الأغنى.'],
     ],
   },
   degrade: {

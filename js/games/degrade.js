@@ -132,6 +132,26 @@
       };
     },
 
+    // Joueur virtuel : range des chiffres au hasard (en respectant les règles) et joue ses boîtes.
+    bot(v, mem, me) {
+      if (v.phase === 'setup' && v.isDuelist && !v.mySetup) {
+        if (!think(mem, 's' + v.duelNo, 1500, 3200)) return null;
+        for (let k = 0; k < 500; k++) {
+          const vals = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, BINS).sort((x, y) => x - y);
+          if (vals.reduce((s, x) => s + x, 0) <= MAX_SUM) return { k: 'setup', vals };
+        }
+        return { k: 'setup', vals: [0, 1, 2, 3, 4, 5, 6] };
+      }
+      if (v.phase === 'play' && v.isDuelist) {
+        const leadPlayed = v.pendTone[v.lead] != null;
+        const myTurn = leadPlayed ? me !== v.lead && v.pending[me] == null : me === v.lead;
+        if (!myTurn || !think(mem, `p${v.duelNo}-${v.round}-${leadPlayed}`, 1000, 2300)) return null;
+        const free = [0, 1, 2, 3, 4, 5, 6].filter((i) => !v.used[me].includes(i));
+        return { k: 'play', i: pick(free) };
+      }
+      return null;
+    },
+
     render(el, v, ui) {
       if (!el._st || el._st.duel !== v.duelNo) el._st = { duel: v.duelNo, vals: Array(BINS).fill(null), sel: 0 };
       const st = el._st;

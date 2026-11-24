@@ -91,6 +91,17 @@
       };
     },
 
+    // Joueur virtuel : vise la balance la plus légère, pose lourd seulement si c'est sans risque.
+    bot(v, mem) {
+      if (v.phase !== 'choose' || v.myChoice) return null;
+      if (!think(mem, 'c' + v.round, 1000, 2500)) return null;
+      const safe = v.scales.map((x, s) => ({ x, s })).sort((a, b) => a.x - b.x)[0];
+      const others = ((v.players.length - 1) * 2.5) / 3;
+      const h = v.hand.slice().sort((a, b) => a - b);
+      const w = safe.x + others + h[h.length - 1] < BREAK ? h[h.length - 1] : h[0];
+      return { k: 'choose', w, s: chance(0.8) ? safe.s : Math.floor(Math.random() * 3) };
+    },
+
     render(el, v, ui) {
       const key = v.round + v.phase;
       if (!el._st || el._st.key !== key) el._st = { key, w: null, s: null };

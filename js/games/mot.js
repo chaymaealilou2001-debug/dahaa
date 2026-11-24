@@ -164,6 +164,35 @@
       };
     },
 
+    // Joueur virtuel : donne des indices de plus en plus proches, et devine d'après les % affichés.
+    bot(v, mem) {
+      if (v.phase === 'pick' && !v.myPick) {
+        if (think(mem, 'pick' + v.round)) return { k: 'pick', w: pick(v.myWords.filter((w) => !w.used)).w };
+        return null;
+      }
+      if (v.phase === 'hint' && v.isGiver) {
+        if (!think(mem, `hint${v.round}${v.giver}${v.stage}-${v.hints.length}`, 1500, 3200)) return null;
+        if (v.stageHints >= (v.stage === 1 ? 3 : 2)) return { k: 'toGuess' };
+        const given = new Set(v.hints.map((h) => WORDS.norm(h.w)));
+        const lo = [30, 45, 60][v.stage - 1], hi = [62, 76, 88][v.stage - 1];
+        const all = WORDS.neighbors(v.mySecret).filter(([w]) => !given.has(WORDS.norm(w)) && !w.includes(' '));
+        let c = all.filter(([, s]) => s >= lo && s <= hi);
+        if (!c.length) c = all.filter(([, s]) => s < 90);
+        if (!c.length) return { k: 'toGuess' };
+        return { k: 'hint', w: pick(c)[0] };
+      }
+      if (v.phase === 'guess' && !v.isGiver && v.myGuess == null) {
+        if (!think(mem, `guess${v.round}${v.giver}${v.stage}`, 2200, 4800)) return null;
+        const scored = WORDS.secrets.filter((c) => c !== v.myPick)
+          .map((c) => ({ c, err: v.hints.reduce((s, h) => s + Math.abs(WORDS.similarity(c, h.w) - h.s), 0) }))
+          .sort((a, b) => a.err - b.err);
+        const i = chance(0.4 + 0.15 * v.stage) ? 0 : 1 + Math.floor(Math.random() * 3);
+        return { k: 'guess', w: scored[Math.min(i, scored.length - 1)].c };
+      }
+      if (v.phase === 'reveal' && v.isGiver && think(mem, `next${v.round}${v.giver}${v.result.stage}`, 3000, 4500)) return { k: 'next' };
+      return null;
+    },
+
     render(el, v, ui) {
       const rows = ranking(v.scores, v.players);
       const giverName = esc(ui.name(v.giver));

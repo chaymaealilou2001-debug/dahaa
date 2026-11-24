@@ -6,13 +6,14 @@
   const START = 30;
   const DECK = [[7, 1], [6, 2], [5, 3], [4, 4], [3, 5], [2, 6], [1, 7], [-1, 7]];
   const MAX_RAISE = 3;
+  const MAX_HANDS = 25;     // au-delà, le plus riche gagne (sinon la partie peut durer très longtemps)
 
   const newDeck = () => shuffle(DECK.flatMap(([v, n]) => Array(n).fill(v)));
   const sum = (a) => a.reduce((s, x) => s + x, 0);
 
   addStrings({
     fr: {
-      'nt.banner': 'Main <b>{h}</b> · Limite <b style="color:var(--gold);font-size:1.15rem">{l}</b> · Pot <b>{p}</b> 🪙',
+      'nt.banner': 'Main <b>{h}</b>/25 · Limite <b style="color:var(--gold);font-size:1.15rem">{l}</b> · Pot <b>{p}</b> 🪙',
       'nt.hand': 'Ta main', 'nt.folded': '(couché)', 'nt.total': 'Total :', 'nt.over': 'dépassé !', 'nt.chips': 'Tes jetons :', 'nt.broke': 'Tu n’as plus de jetons : tu regardes la partie.',
       'nt.showHelp': 'Touche la carte que tu veux <b>montrer à tout le monde</b>.', 'nt.wait': 'En attente des autres…',
       'nt.you': '👉 <b>À toi</b>', 'nt.turn': 'Tour de <b>{n}</b>', 'nt.bet': 'Mise {r}/2', 'nt.cards': 'Cartes',
@@ -24,7 +25,7 @@
       'nt.e.raise': 'Relance trop haute.', 'nt.e.deck': 'Plus de cartes.',
     },
     en: {
-      'nt.banner': 'Hand <b>{h}</b> · Limit <b style="color:var(--gold);font-size:1.15rem">{l}</b> · Pot <b>{p}</b> 🪙',
+      'nt.banner': 'Hand <b>{h}</b>/25 · Limit <b style="color:var(--gold);font-size:1.15rem">{l}</b> · Pot <b>{p}</b> 🪙',
       'nt.hand': 'Your hand', 'nt.folded': '(folded)', 'nt.total': 'Total:', 'nt.over': 'over!', 'nt.chips': 'Your tokens:', 'nt.broke': 'You have no tokens left: you are watching.',
       'nt.showHelp': 'Tap the card you want to <b>show to everyone</b>.', 'nt.wait': 'Waiting for the others…',
       'nt.you': '👉 <b>Your turn</b>', 'nt.turn': '<b>{n}</b>’s turn', 'nt.bet': 'Bet {r}/2', 'nt.cards': 'Cards',
@@ -36,7 +37,7 @@
       'nt.e.raise': 'Raise too high.', 'nt.e.deck': 'No cards left.',
     },
     ar: {
-      'nt.banner': 'اليد <b>{h}</b> · الحدّ <b style="color:var(--gold);font-size:1.15rem">{l}</b> · المجموع <b>{p}</b> 🪙',
+      'nt.banner': 'اليد <b>{h}</b>/25 · الحدّ <b style="color:var(--gold);font-size:1.15rem">{l}</b> · المجموع <b>{p}</b> 🪙',
       'nt.hand': 'يدك', 'nt.folded': '(انسحبت)', 'nt.total': 'المجموع:', 'nt.over': 'تجاوزت!', 'nt.chips': 'قطعك:', 'nt.broke': 'نفدت قطعك: أنت تشاهد اللعبة.',
       'nt.showHelp': 'المس البطاقة التي تريد <b>إظهارها للجميع</b>.', 'nt.wait': 'في انتظار الآخرين…',
       'nt.you': '👉 <b>دورك</b>', 'nt.turn': 'دور <b>{n}</b>', 'nt.bet': 'الرهان {r}/2', 'nt.cards': 'البطاقات',
@@ -108,7 +109,7 @@
       }
       if (a.k === 'next' && g.phase === 'result' && isHost) {
         const alive = g.order.filter((p) => g.chips[p] > 0);
-        if (alive.length <= 1) { g.phase = 'end'; return; }
+        if (alive.length <= 1 || g.handNo >= MAX_HANDS) { g.phase = 'end'; return; }
         startHand(g);
         return;
       }
@@ -139,6 +140,33 @@
         myShown: g.shown[pid], myIn: g.inHand.includes(pid), deckLeft: g.deck.length,
         last: showAll ? g.last : null, out: g.out,
       };
+    },
+
+    // Joueur virtuel : mise selon sa distance à la limite, tire une carte s'il est loin.
+    bot(v, mem, me) {
+      const P = v.pub[me];
+      if (!P || P.folded) return null;
+      if (v.phase === 'show' && v.myShown == null) {
+        if (!think(mem, 's' + v.handNo)) return null;
+        return { k: 'show', i: chance(0.5) ? P.cards.indexOf(Math.min(...P.cards)) : Math.floor(Math.random() * 3) };
+      }
+      if (v.toAct !== me) return null;
+      const dist = v.limit - P.total;
+      if (v.phase === 'bet') {
+        if (!think(mem, `b${v.handNo}-${v.betRound}-${v.cur}`, 1000, 2300)) return null;
+        const need = v.cur - P.contrib;
+        if (dist < 0 && need > 0 && (v.betRound === 2 || chance(0.5))) return { k: 'fold' };
+        const maxR = Math.min(MAX_RAISE, v.cap - v.cur, v.chips[me] - need);
+        if (dist >= 0 && dist <= 1 && maxR >= 1 && chance(0.5)) return { k: 'raise', n: Math.min(maxR, 1 + Math.floor(Math.random() * 2)) };
+        if (v.betRound === 2 && need > 2 && dist > 3 && chance(0.5)) return { k: 'fold' };
+        return { k: 'call' };
+      }
+      if (v.phase === 'draw') {
+        if (!think(mem, `d${v.handNo}-${P.hits.length}`, 900, 1900)) return null;
+        if (dist >= 3 || (dist < 0 && chance(0.6)) || (dist === 2 && chance(0.4))) return { k: 'hit' };
+        return { k: 'stay' };
+      }
+      return null;
     },
 
     render(el, v, ui) {

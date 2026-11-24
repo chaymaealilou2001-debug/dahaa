@@ -160,6 +160,31 @@
       };
     },
 
+    // Joueur virtuel : appuie, puis tient un temps choisi selon sa réserve et les manches restantes.
+    bot(v, mem) {
+      if (v.myBank <= 0) return null;
+      if (v.phase === 'ready') {
+        mem.abstain = null;
+        if (mem.pressed !== v.round && think(mem, 'r' + v.round, 600, 1800)) { mem.pressed = v.round; return { k: 'press' }; }
+        return null;
+      }
+      if (v.phase === 'countdown' && v.iAmIn) {
+        if (mem.abstain == null) mem.abstain = chance(0.15);
+        if (mem.abstain && mem.left !== v.round) { mem.left = v.round; return { k: 'release' }; }
+        return null;
+      }
+      if (v.phase === 'live' && v.iAmIn) {
+        if (mem.liveRound !== v.round) {
+          mem.liveRound = v.round;
+          mem.t0 = Date.now();
+          const budget = v.myBank / (v.rounds - v.round + 1);
+          mem.target = Math.min(v.myBank, rand(0.3, 1.8) * budget + rand(0, 1500));
+        }
+        if (Date.now() - mem.t0 >= mem.target) return { k: 'release' };
+      }
+      return null;
+    },
+
     render(el, v, ui) {
       local.send = ui.send;
       const rows = ranking(v.tokens, v.players, v.finalBanks || null);

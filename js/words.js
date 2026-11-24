@@ -93,8 +93,15 @@ const WORDS = (() => {
     return Math.max(0, Math.min(99, s));
   }
 
+  // Mots proches d'un mot secret (pour les joueurs virtuels) : [[mot, %], …]
+  function neighbors(secret) {
+    const k = Object.keys(RAW).find((x) => norm(x) === norm(secret));
+    return k ? RAW[k].split('|').map((e) => { const m = e.trim().match(/^(.*\S)\s+(\d+)$/); return m ? [m[1], +m[2]] : null; }).filter(Boolean) : [];
+  }
+
   return {
     secrets: Object.keys(RAW),
+    neighbors,
     norm,
     similarity,
     same: (a, b) => norm(a) === norm(b),

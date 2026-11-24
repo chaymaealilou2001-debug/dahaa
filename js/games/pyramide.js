@@ -115,6 +115,19 @@
       };
     },
 
+    // Joueur virtuel : trouve une combinaison de temps en temps (et se trompe parfois).
+    bot(v, mem) {
+      if (v.phase !== 'play') return null;
+      if (mem.round !== v.round) { mem.round = v.round; mem.next = Date.now() + rand(6000, 13000); }
+      if (Date.now() < mem.next) return null;
+      mem.next = Date.now() + rand(7000, 15000);
+      const found = new Set(v.found.map((f) => f.code));
+      const left = solutions(v.tiles, v.target).filter((s) => !found.has(s));
+      if (!left.length) return chance(0.7) ? { k: 'none' } : null;
+      if (chance(0.12)) return { k: 'claim', c: shuffle(LETTERS).slice(0, 3).join('') };
+      return { k: 'claim', c: pick(left) };
+    },
+
     render(el, v, ui) {
       const key = v.round + v.phase;
       if (!el._st || el._st.key !== key) el._st = { key, sel: [] };

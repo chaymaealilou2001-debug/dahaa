@@ -101,6 +101,25 @@
       };
     },
 
+    // Joueur virtuel : repère environ 70 % des répétitions, avec un temps de réaction, et se trompe rarement.
+    bot(v, mem) {
+      if (v.phase !== 'run') return null;
+      if (mem.round !== v.round) {
+        mem.round = v.round; mem.t0 = Date.now() + v.startIn; mem.plan = {}; mem.done = {};
+        const seen = new Set();
+        v.seq.forEach((e, i) => {
+          const d = seen.has(e); seen.add(e);
+          if ((d && chance(0.7)) || (!d && chance(0.03))) mem.plan[i] = rand(350, v.ms * 0.85);
+        });
+      }
+      const dt = Date.now() - mem.t0;
+      if (dt < 0) return null;
+      const i = Math.floor(dt / v.ms);
+      if (i >= v.seq.length || mem.plan[i] == null || mem.done[i] || dt - i * v.ms < mem.plan[i]) return null;
+      mem.done[i] = true;
+      return { k: 'tap', i, late: 0 };
+    },
+
     render(el, v, ui) {
       const rows = ranking(v.scores, v.players);
       const key = v.phase + v.round;

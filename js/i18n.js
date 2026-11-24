@@ -24,6 +24,9 @@ addStrings({
     'err.lost': 'Connexion perdue avec l’hôte.', 'err.notFound': 'Salle introuvable. Vérifie le code.',
     'err.net': 'Problème de connexion internet.', 'err.notConnected': 'Pas connecté.',
     'offline.title': 'Pas de connexion', 'offline.text': 'Dahaa a besoin d’internet pour relier les téléphones. Vérifie ta connexion puis recharge la page.', 'reload': 'Recharger',
+    'home.solo': '🤖 Jouer seul', 'home.soloHelp': 'Contre des joueurs virtuels, même sans internet.', 'home.or': 'ou à plusieurs',
+    'lobby.addBot': '🤖 Ajouter un joueur virtuel', 'lobby.removeBot': 'Retirer', 'lobby.solo': 'Partie solo', 'lobby.soloHelp': 'Ajoute ou retire des joueurs virtuels, puis choisis un jeu.',
+    'err.noBotNet': 'Les joueurs virtuels sont là. Pour inviter des amis, crée une salle en ligne.',
   },
   en: {
     'app.tagline': 'Games of cunning and strategy.<br>Everyone on their own phone.',
@@ -47,6 +50,9 @@ addStrings({
     'err.lost': 'Connection to the host lost.', 'err.notFound': 'Room not found. Check the code.',
     'err.net': 'Internet connection problem.', 'err.notConnected': 'Not connected.',
     'offline.title': 'No connection', 'offline.text': 'Dahaa needs the internet to connect the phones. Check your connection and reload the page.', 'reload': 'Reload',
+    'home.solo': '🤖 Play alone', 'home.soloHelp': 'Against virtual players, even offline.', 'home.or': 'or with others',
+    'lobby.addBot': '🤖 Add a virtual player', 'lobby.removeBot': 'Remove', 'lobby.solo': 'Solo game', 'lobby.soloHelp': 'Add or remove virtual players, then choose a game.',
+    'err.noBotNet': 'Virtual players are here. To invite friends, create an online room.',
   },
   ar: {
     'app.tagline': 'ألعاب دهاء واستراتيجية.<br>كل واحد على هاتفه.',
@@ -70,5 +76,8 @@ addStrings({
     'err.lost': 'انقطع الاتصال بالمضيف.', 'err.notFound': 'الغرفة غير موجودة. تحقق من الرمز.',
     'err.net': 'مشكلة في الاتصال بالإنترنت.', 'err.notConnected': 'غير متصل.',
     'offline.title': 'لا يوجد اتصال', 'offline.text': 'يحتاج دهاء إلى الإنترنت لربط الهواتف. تحقق من اتصالك ثم أعد تحميل الصفحة.', 'reload': 'إعادة التحميل',
+    'home.solo': '🤖 العب وحدك', 'home.soloHelp': 'ضد لاعبين افتراضيين، حتى بدون إنترنت.', 'home.or': 'أو مع الآخرين',
+    'lobby.addBot': '🤖 أضف لاعبًا افتراضيًا', 'lobby.removeBot': 'إزالة', 'lobby.solo': 'لعبة فردية', 'lobby.soloHelp': 'أضف أو أزل لاعبين افتراضيين، ثم اختر لعبة.',
+    'err.noBotNet': 'اللاعبون الافتراضيون هنا. لدعوة أصدقائك، أنشئ غرفة على الإنترنت.',
   },
 });

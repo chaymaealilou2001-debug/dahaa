@@ -98,6 +98,27 @@
       };
     },
 
+    // Joueur virtuel : montre plutôt des petites cartes, puis joue celle que les autres montrent le moins.
+    bot(v, mem, me) {
+      if (v.phase === 'pick2' && !v.myPair) {
+        if (!think(mem, 'p' + v.round)) return null;
+        const h = v.hand.slice().sort((x, y) => x - y);
+        const a = pick(h.slice(0, Math.max(2, Math.ceil(h.length * 0.6))));
+        const b = pick(h.filter((n) => n !== a));
+        return { k: 'pick2', a, b };
+      }
+      if (v.phase === 'drop' && v.myDrop == null) {
+        if (!think(mem, 'd' + v.round, 1300, 2800)) return null;
+        const cnt = {};
+        Object.entries(v.pairs).forEach(([p, pr]) => { if (p !== me) pr.forEach((n) => { cnt[n] = (cnt[n] || 0) + 1; }); });
+        const [x, y] = v.myPair;
+        const cx = cnt[x] || 0, cy = cnt[y] || 0;
+        const play = cx < cy ? x : cy < cx ? y : (chance(0.6) ? x : y);
+        return { k: 'drop', n: play === x ? y : x };
+      }
+      return null;
+    },
+
     render(el, v, ui) {
       const rows = ranking(v.scores, v.players);
       const sel = (el._sel = el._sel && el._phaseKey === v.phase + v.round ? el._sel : []);

@@ -118,6 +118,20 @@
       };
     },
 
+    // Joueur virtuel : estime le nombre probable de cartes d'une couleur à partir de sa main.
+    bot(v, mem, me) {
+      if (v.phase !== 'bid' || v.cur !== me) return null;
+      if (!think(mem, 'b' + JSON.stringify(v.bid) + v.total, 1300, 3000)) return null;
+      const unknown = v.total - v.myHand.length;
+      const exp = (c) => v.myHand.filter((k) => k === c || k === '*').length + unknown * (14 / 44);
+      if (v.bid && v.bid.n > exp(v.bid.c) + rand(0.6, 1.5)) return { k: 'liar' };
+      const best = KEYS.map((c) => ({ c, e: exp(c) })).sort((a, b) => b.e - a.e)[0];
+      const minN = v.bid ? v.bid.n + 1 : 1;
+      let n = Math.max(minN, Math.floor(best.e - rand(0.3, 1.5)));
+      if (n > best.e + 0.6 || n > v.total) { if (v.bid) return { k: 'liar' }; n = minN; }
+      return { k: 'bid', n, c: best.c };
+    },
+
     render(el, v, ui) {
       const st = (el._st = el._st || { n: null, c: 'r' });
       const minN = v.bid ? v.bid.n + 1 : 1;

@@ -60,6 +60,17 @@ function ranking(scores, players, tiebreak) {
     .sort((a, b) => b.score - a.score || b.tb - a.tb);
 }
 
+// ---------- Joueurs virtuels ----------
+// Un robot « réfléchit » un peu avant d'agir : renvoie true quand il a fini de réfléchir
+// à la situation `key` (un nouveau délai aléatoire commence à chaque nouvelle situation).
+function think(mem, key, min = 900, max = 2200) {
+  const now = Date.now();
+  if (mem.key !== key) { mem.key = key; mem.at = now + min + Math.random() * (max - min); }
+  return now >= mem.at;
+}
+const rand = (a, b) => a + Math.random() * (b - a);
+const chance = (p) => Math.random() < p;
+
 const winnerCard = (name, sub) => `<div class="card center"><div class="muted">${sub || t('winner')}</div><div style="font-size:1.8rem;font-weight:800;color:var(--gold)">🏆 ${esc(name)}</div></div>`;
 const waitHostP = () => `<p class="muted center" style="margin-top:12px">${t('waitHost')}</p>`;
 

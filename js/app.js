@@ -54,10 +54,60 @@ function redraw() {
   if (lastView) render(lastView); else if (screenFn) screenFn();
 }
 
+// ---------- Joueurs virtuels (robots) ----------
+const BOT_NAMES = ['Lina', 'Omar', 'Yasmine', 'Karim', 'Salma', 'Adam', 'Nora', 'Ilyas', 'Rania'];
+let botLoop = null;
+const botMem = {};
+
+function addBot() {
+  if (!H || H.screen !== 'lobby' || H.players.length >= MAX_PLAYERS) return;
+  const used = new Set(H.players.map((p) => p.name));
+  const name = '🤖 ' + (BOT_NAMES.find((n) => !used.has('🤖 ' + n)) || 'Bot');
+  H.players.push({ pid: 'bot-' + Math.random().toString(36).slice(2, 8), name, online: true, bot: true });
+  broadcast();
+}
+function removeBot(pid) {
+  if (!H || H.screen !== 'lobby') return;
+  H.players = H.players.filter((p) => !(p.bot && p.pid === pid));
+  broadcast();
+}
+const isBot = (pid) => !!(H && H.players.find((p) => p.pid === pid && p.bot));
+
+// Toutes les 300 ms, chaque robot regarde ce qu'il voit (comme un vrai joueur) et décide.
+function startBotLoop() {
+  clearInterval(botLoop);
+  botLoop = setInterval(() => {
+    if (!H || H.screen !== 'game' || !H.g) return;
+    const G = GAMES[H.gameId];
+    if (!G.bot) return;
+    for (const p of H.players) {
+      if (!p.bot) continue;
+      const mem = (botMem[p.pid + ':' + H.gameId] = botMem[p.pid + ':' + H.gameId] || {});
+      let a = null;
+      try { a = G.bot(G.view(H.g, p.pid), mem, p.pid); } catch (e) { console.warn('bot', e); }
+      if (a) {
+        mem.at = Date.now() + 900; // évite de répéter une action refusée en boucle
+        doAction(p.pid, a);
+        if (!H || H.screen !== 'game') return;
+      }
+    }
+  }, 300);
+}
+
+// Partie solo : pas de réseau, l'hôte joue avec des robots.
+function soloCreate() {
+  teardown();
+  role = 'host';
+  H = { code: 'SOLO', solo: true, hostPid: me.pid, players: [{ pid: me.pid, name: me.name, online: true }], screen: 'lobby', gameId: null, g: null };
+  addBot(); addBot();
+  startBotLoop();
+}
+
 // ---------- Réseau : hôte ----------
 function hostCreate() {
   teardown();
   role = 'host';
+  startBotLoop();
   showLoading('loading.create');
   const code = randCode();
   peer = new Peer(PREFIX + code);
@@ -136,13 +186,17 @@ function doAction(pid, a) {
     // Affiche d'explication avant la partie (sauf pour « Rejouer »)
     H.screen = a.skipIntro ? 'game' : 'intro';
     H.ready = {};
+    H.players.forEach((p) => { if (p.bot) H.ready[p.pid] = true; });
+    Object.keys(botMem).forEach((k) => delete botMem[k]);
     return broadcast();
   }
   if (a.k === 'intro:ready' && H.screen === 'intro') {
     H.ready[pid] = !H.ready[pid];
-    if (H.players.filter((p) => p.online).every((p) => H.ready[p.pid])) H.screen = 'game';
+    if (H.players.filter((p) => p.online).every((p) => p.bot || H.ready[p.pid])) H.screen = 'game';
     return broadcast();
   }
+  if (a.k === 'bot:add' && isHost) return addBot();
+  if (a.k === 'bot:remove' && isHost) return removeBot(a.pid);
   if (a.k === 'intro:go' && H.screen === 'intro') {
     if (!isHost) return;
     H.screen = 'game';
@@ -178,8 +232,8 @@ function toastFor(pid, key, p) {
 function viewFor(pid) {
   const G = H.gameId && GAMES[H.gameId];
   return {
-    code: H.code, me: pid, hostPid: H.hostPid, screen: H.screen, gameId: H.gameId,
-    players: H.players.map((p) => ({ pid: p.pid, name: p.name, online: p.online })),
+    code: H.code, solo: !!H.solo, me: pid, hostPid: H.hostPid, screen: H.screen, gameId: H.gameId,
+    players: H.players.map((p) => ({ pid: p.pid, name: p.name, online: p.online, bot: !!p.bot })),
     ready: H.screen === 'intro' ? Object.keys(H.ready || {}).filter((p) => H.ready[p]) : null,
     gv: G && H.g && H.screen === 'game' ? G.view(H.g, pid) : null,
   };
@@ -235,6 +289,7 @@ function netError(e) {
 
 function teardown() {
   clearTimers();
+  clearInterval(botLoop); botLoop = null;
   clearTimeout(joinTimeout);
   conns.clear();
   if (hostConn) { try { hostConn.close(); } catch { /* ignore */ } }
@@ -273,6 +328,11 @@ function showHome() {
       <label class="muted" for="name">${t('home.name')}</label>
       <input type="text" id="name" maxlength="16" autocomplete="nickname" placeholder="${esc(t('home.namePh'))}" value="${esc(typed != null ? typed : me.name)}">
     </div>
+    <div class="card stack center">
+      <button class="gold block" id="solo">${t('home.solo')}</button>
+      <p class="muted" style="margin:0">${t('home.soloHelp')}</p>
+    </div>
+    <p class="muted center" style="margin:14px 0 8px">${t('home.or')}</p>
     <div class="card stack">
       <button class="primary block" id="create">${t('home.create')}</button>
       <div class="sep"></div>
@@ -288,6 +348,7 @@ function showHome() {
     me.name = n; LS.set('dahaa.name', n); return n;
   };
   $('#create').onclick = () => { if (getName()) hostCreate(); };
+  $('#solo').onclick = () => { if (getName()) soloCreate(); };
   $('#join').onclick = () => { if (getName()) clientJoin($('#code').value); };
   $('#code').onkeydown = (e) => { if (e.key === 'Enter') $('#join').click(); };
 }
@@ -329,14 +390,17 @@ function renderLobby(app, v) {
   app.dataset.screen = 'lobby';
   app.innerHTML = `
     <div class="topbar">${logo().replace('logo', 'title')}<div class="row">${langBtn()}<button class="ghost small" id="quit">${t('quit')}</button></div></div>
-    <div class="card center">
+    ${v.solo
+    ? `<div class="card center"><h2>🤖 ${t('lobby.solo')}</h2><p class="muted" style="margin:0">${t('lobby.soloHelp')}</p></div>`
+    : `<div class="card center">
       <div class="muted">${t('lobby.code')}</div>
       <div class="bigcode">${esc(v.code)}</div>
       <button class="small" id="share">${t('lobby.invite')}</button>
-    </div>
+    </div>`}
     <div class="card">
       <h3>${t('lobby.players', { n: online })}</h3>
-      <ul class="players">${v.players.map((p) => `<li class="${p.online ? '' : 'off'} ${p.pid === v.hostPid ? 'host' : ''}">${esc(p.name)}${p.pid === v.me ? ' ' + t('you') : ''}</li>`).join('')}</ul>
+      <ul class="players">${v.players.map((p) => `<li class="${p.online ? '' : 'off'} ${p.pid === v.hostPid ? 'host' : ''}">${esc(p.name)}${p.pid === v.me ? ' ' + t('you') : ''}${p.bot && isHost ? ` <button class="xbtn" data-rmbot="${p.pid}" aria-label="${t('lobby.removeBot')}">✕</button>` : ''}</li>`).join('')}</ul>
+      ${isHost ? `<button class="small block" id="addbot" style="margin-top:10px">${t('lobby.addBot')}</button>` : ''}
     </div>
     <div class="card">
       <h3>${isHost ? t('lobby.choose') : t('lobby.games')}</h3>
@@ -352,7 +416,9 @@ function renderLobby(app, v) {
         </div>`).join('')}</div>
     </div>`;
   $('#quit').onclick = confirmQuit;
-  $('#share').onclick = () => shareRoom(v.code);
+  if ($('#share')) $('#share').onclick = () => shareRoom(v.code);
+  if ($('#addbot')) $('#addbot').onclick = () => send({ k: 'bot:add' });
+  app.querySelectorAll('[data-rmbot]').forEach((b) => { b.onclick = () => send({ k: 'bot:remove', pid: b.dataset.rmbot }); });
   app.querySelectorAll('[data-rules]').forEach((b) => { b.onclick = () => showRules(b.dataset.rules); });
   if (isHost) app.querySelectorAll('[data-game]').forEach((b) => { b.onclick = () => send({ k: 'lobby:start', game: b.dataset.game }); });
 }
@@ -422,7 +488,7 @@ async function shareRoom(code) {
 }
 
 // Prévenir avant de fermer l'onglet en tant qu'hôte
-window.addEventListener('beforeunload', (e) => { if (role === 'host' && H && H.players.length > 1) { e.preventDefault(); e.returnValue = ''; } });
+window.addEventListener('beforeunload', (e) => { if (role === 'host' && H && H.players.filter((p) => !p.bot).length > 1) { e.preventDefault(); e.returnValue = ''; } });
 
 // Service worker (appli installable / hors-ligne)
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
