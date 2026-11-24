@@ -18,33 +18,33 @@
       'mot.guessTitle': 'Quel est le mot de {n} ?', 'mot.guessPh': 'Ta proposition', 'mot.guessHelp': 'Tout le monde révèle en même temps. Bonne réponse = {p} pt(s).',
       'mot.force': 'Révéler sans attendre les autres', 'mot.found': '🎯 Trouvé par <b>{n}</b> : +{p} pt(s) chacun.', 'mot.notFound': '😈 Personne n’a trouvé ! <b>{n}</b> gagne +{p} pt(s).',
       'mot.wasWord': 'Le mot secret était', 'mot.guesses': 'Propositions', 'mot.nextPlayer': 'Joueur suivant', 'mot.retry': 'Nouvelle tentative', 'mot.waitNext': 'En attente de la suite…',
-      'mot.frNote': 'Les mots sont en français.',
+      'mot.langNote': 'Les mots de cette partie sont en {l} (la langue de l’hôte).',
       'mot.e.one': 'Un seul mot, en lettres.', 'mot.e.secret': 'Tu ne peux pas donner ton mot secret !', 'mot.e.dup': 'Indice déjà donné.', 'mot.e.need': 'Donne au moins un indice.',
     },
     en: {
       'mot.banner': 'Round <b>{r}</b>/2', 'mot.double': ' · <b>points ×2</b>', 'mot.turn': ' · <b>{n}</b>’s turn · attempt {s}/{t}',
       'mot.yourSecret': 'Your secret word:', 'mot.pickTitle': 'Choose your secret word', 'mot.pickHelp': 'The others will have to guess it from your clues.',
-      'mot.hintPh': 'A clue (one noun, in French)', 'mot.hintCount': '{a}/{b} clues for this attempt.', 'mot.toGuess': 'Done, make your guesses!',
+      'mot.hintPh': 'A clue (one noun)', 'mot.hintCount': '{a}/{b} clues for this attempt.', 'mot.toGuess': 'Done, make your guesses!',
       'mot.giving': '<b>{n}</b> is giving clues…', 'mot.watch': 'Watch the %: the higher it is, the closer the clue is to the secret word.',
       'mot.hints': 'Clues', 'mot.noHint': 'No clue yet.', 'mot.attempt': 'attempt {n}',
       'mot.othersSearch': 'The others are looking for your word (<b>{w}</b>)…', 'mot.answered': '{a}/{b} have answered.', 'mot.yourGuess': 'Your guess:',
-      'mot.guessTitle': 'What is {n}’s word?', 'mot.guessPh': 'Your guess (in French)', 'mot.guessHelp': 'Everyone reveals at the same time. Right answer = {p} pt(s).',
+      'mot.guessTitle': 'What is {n}’s word?', 'mot.guessPh': 'Your guess', 'mot.guessHelp': 'Everyone reveals at the same time. Right answer = {p} pt(s).',
       'mot.force': 'Reveal without waiting', 'mot.found': '🎯 Found by <b>{n}</b>: +{p} pt(s) each.', 'mot.notFound': '😈 Nobody found it! <b>{n}</b> gets +{p} pt(s).',
       'mot.wasWord': 'The secret word was', 'mot.guesses': 'Guesses', 'mot.nextPlayer': 'Next player', 'mot.retry': 'New attempt', 'mot.waitNext': 'Waiting for what’s next…',
-      'mot.frNote': 'The words are in French.',
+      'mot.langNote': 'The words in this game are in {l} (the host’s language).',
       'mot.e.one': 'A single word, letters only.', 'mot.e.secret': 'You can’t give your secret word!', 'mot.e.dup': 'Clue already given.', 'mot.e.need': 'Give at least one clue.',
     },
     ar: {
       'mot.banner': 'الجولة <b>{r}</b>/2', 'mot.double': ' · <b>النقاط ×2</b>', 'mot.turn': ' · دور <b>{n}</b> · المحاولة {s}/{t}',
       'mot.yourSecret': 'كلمتك السرية:', 'mot.pickTitle': 'اختر كلمتك السرية', 'mot.pickHelp': 'على الآخرين تخمينها من تلميحاتك.',
-      'mot.hintPh': 'تلميح (اسم واحد بالفرنسية)', 'mot.hintCount': '{a}/{b} تلميحات في هذه المحاولة.', 'mot.toGuess': 'انتهيت، قدّموا أجوبتكم!',
+      'mot.hintPh': 'تلميح (اسم واحد)', 'mot.hintCount': '{a}/{b} تلميحات في هذه المحاولة.', 'mot.toGuess': 'انتهيت، قدّموا أجوبتكم!',
       'mot.giving': '<b>{n}</b> يعطي تلميحات…', 'mot.watch': 'راقب النسبة: كلما ارتفعت كان التلميح أقرب إلى الكلمة السرية.',
       'mot.hints': 'التلميحات', 'mot.noHint': 'لا يوجد تلميح بعد.', 'mot.attempt': 'المحاولة {n}',
       'mot.othersSearch': 'الآخرون يبحثون عن كلمتك (<b>{w}</b>)…', 'mot.answered': '{a}/{b} أجابوا.', 'mot.yourGuess': 'جوابك:',
-      'mot.guessTitle': 'ما هي كلمة {n}؟', 'mot.guessPh': 'جوابك (بالفرنسية)', 'mot.guessHelp': 'الجميع يكشف في نفس الوقت. الجواب الصحيح = {p} نقطة.',
+      'mot.guessTitle': 'ما هي كلمة {n}؟', 'mot.guessPh': 'جوابك', 'mot.guessHelp': 'الجميع يكشف في نفس الوقت. الجواب الصحيح = {p} نقطة.',
       'mot.force': 'اكشف دون انتظار الآخرين', 'mot.found': '🎯 وجدها <b>{n}</b>: ‎+{p} نقطة لكل واحد.', 'mot.notFound': '😈 لم يجدها أحد! <b>{n}</b> يربح ‎+{p} نقطة.',
       'mot.wasWord': 'الكلمة السرية كانت', 'mot.guesses': 'الأجوبة', 'mot.nextPlayer': 'اللاعب التالي', 'mot.retry': 'محاولة جديدة', 'mot.waitNext': 'في انتظار المتابعة…',
-      'mot.frNote': 'الكلمات بالفرنسية.',
+      'mot.langNote': 'لغة كلمات هذه اللعبة: {l} (لغة المضيف).',
       'mot.e.one': 'كلمة واحدة، بالحروف فقط.', 'mot.e.secret': 'لا يمكنك إعطاء كلمتك السرية!', 'mot.e.dup': 'هذا التلميح أُعطي من قبل.', 'mot.e.need': 'أعطِ تلميحًا واحدًا على الأقل.',
     },
   });
@@ -57,20 +57,24 @@
     min: 2,
     max: 8,
 
-    init(players) {
-      const pool = shuffle(WORDS.secrets);
+    // La langue des mots est celle de l'hôte au début de la partie (la même pour tous les joueurs).
+    init(players, ctx) {
+      const lang = (ctx && ctx.lang) || 'fr';
+      const W = WORDS.forLang(lang);
+      const pool = shuffle(W.secrets);
       const words = {};
       players.forEach((p, i) => { words[p.pid] = pool.slice(i * WORDS_EACH, i * WORDS_EACH + WORDS_EACH); });
       const scores = {};
       players.forEach((p) => { scores[p.pid] = 0; });
       return {
-        players, order: shuffle(players.map((p) => p.pid)),
+        lang, players, order: shuffle(players.map((p) => p.pid)),
         round: 1, phase: 'pick', words, used: {}, secret: {},
         giverIdx: 0, stage: 1, hints: [], guesses: {}, result: null, scores,
       };
     },
 
     act(g, pid, a, ctx, isHost) {
+      const W = WORDS.forLang(g.lang);
       const giver = g.order[g.giverIdx];
       const mult = g.round === 2 ? 2 : 1;
       const others = g.order.filter((p) => p !== giver);
@@ -84,12 +88,12 @@
 
       if (a.k === 'hint' && g.phase === 'hint' && pid === giver) {
         const w = String(a.w || '').trim().toLowerCase();
-        if (!/^[a-zà-ÿœæ' -]{2,30}$/i.test(w)) return 'mot.e.one';
+        if (!/^[\p{L}\p{M}'’ -]{2,30}$/u.test(w)) return 'mot.e.one';
         const sec = g.secret[giver];
-        const nw = WORDS.norm(w), ns = WORDS.norm(sec);
+        const nw = W.norm(w), ns = W.norm(sec);
         if (nw === ns || (ns.length >= 4 && nw.includes(ns)) || (nw.length >= 4 && ns.includes(nw))) return 'mot.e.secret';
-        if (g.hints.some((h) => WORDS.same(h.w, w))) return 'mot.e.dup';
-        const s = WORDS.similarity(sec, w);
+        if (g.hints.some((h) => W.same(h.w, w))) return 'mot.e.dup';
+        const s = W.similarity(sec, w);
         g.hints.push({ w, s, stage: g.stage });
         const n = g.hints.filter((h) => h.stage === g.stage).length;
         if (s >= 95 || n >= MAX_HINTS) { g.phase = 'guess'; g.guesses = {}; }
@@ -104,7 +108,7 @@
 
       const resolve = () => {
         const sec = g.secret[giver];
-        const correct = others.filter((p) => g.guesses[p] && WORDS.same(g.guesses[p], sec));
+        const correct = others.filter((p) => g.guesses[p] && W.same(g.guesses[p], sec));
         const pts = g.stage * mult;
         let done = false;
         if (correct.length) { correct.forEach((p) => { g.scores[p] += pts; }); done = true; }
@@ -147,7 +151,7 @@
       const giver = g.order[g.giverIdx];
       const others = g.order.filter((p) => p !== giver);
       return {
-        phase: g.phase, round: g.round, stage: g.stage, stages: STAGES, maxHints: MAX_HINTS,
+        lang: g.lang, phase: g.phase, round: g.round, stage: g.stage, stages: STAGES, maxHints: MAX_HINTS,
         giver, isGiver: pid === giver,
         order: g.order,
         myWords: g.phase === 'pick' ? (g.words[pid] || []).map((w) => ({ w, used: (g.used[pid] || []).includes(w) })) : null,
@@ -166,6 +170,7 @@
 
     // Joueur virtuel : donne des indices de plus en plus proches, et devine d'après les % affichés.
     bot(v, mem) {
+      const W = WORDS.forLang(v.lang);
       if (v.phase === 'pick' && !v.myPick) {
         if (think(mem, 'pick' + v.round)) return { k: 'pick', w: pick(v.myWords.filter((w) => !w.used)).w };
         return null;
@@ -173,9 +178,9 @@
       if (v.phase === 'hint' && v.isGiver) {
         if (!think(mem, `hint${v.round}${v.giver}${v.stage}-${v.hints.length}`, 1500, 3200)) return null;
         if (v.stageHints >= (v.stage === 1 ? 3 : 2)) return { k: 'toGuess' };
-        const given = new Set(v.hints.map((h) => WORDS.norm(h.w)));
+        const given = new Set(v.hints.map((h) => W.norm(h.w)));
         const lo = [30, 45, 60][v.stage - 1], hi = [62, 76, 88][v.stage - 1];
-        const all = WORDS.neighbors(v.mySecret).filter(([w]) => !given.has(WORDS.norm(w)) && !w.includes(' '));
+        const all = W.neighbors(v.mySecret).filter(([w]) => !given.has(W.norm(w)) && !w.includes(' '));
         let c = all.filter(([, s]) => s >= lo && s <= hi);
         if (!c.length) c = all.filter(([, s]) => s < 90);
         if (!c.length) return { k: 'toGuess' };
@@ -183,8 +188,8 @@
       }
       if (v.phase === 'guess' && !v.isGiver && v.myGuess == null) {
         if (!think(mem, `guess${v.round}${v.giver}${v.stage}`, 2200, 4800)) return null;
-        const scored = WORDS.secrets.filter((c) => c !== v.myPick)
-          .map((c) => ({ c, err: v.hints.reduce((s, h) => s + Math.abs(WORDS.similarity(c, h.w) - h.s), 0) }))
+        const scored = W.secrets.filter((c) => c !== v.myPick)
+          .map((c) => ({ c, err: v.hints.reduce((s, h) => s + Math.abs(W.similarity(c, h.w) - h.s), 0) }))
           .sort((a, b) => a.err - b.err);
         const i = chance(0.4 + 0.15 * v.stage) ? 0 : 1 + Math.floor(Math.random() * 3);
         return { k: 'guess', w: scored[Math.min(i, scored.length - 1)].c };
@@ -196,7 +201,8 @@
     render(el, v, ui) {
       const rows = ranking(v.scores, v.players);
       const giverName = esc(ui.name(v.giver));
-      const word = (w) => `<bdi lang="fr">${esc(w)}</bdi>`;
+      const word = (w) => `<bdi lang="${v.lang}">${esc(w)}</bdi>`;
+      const langNote = v.lang !== I18N.lang ? `<p class="muted">${t('mot.langNote', { l: LANGS[v.lang] })}</p>` : '';
       const hintList = (list) => list.length ? `<ul class="hints">${list.map((h) => `
         <li class="hint"><span class="w">${word(h.w)}<span class="stg">${t('mot.attempt', { n: h.stage })}</span></span>
         <span class="pct" style="color:${barColor(h.s)}">${h.s}%</span>
@@ -206,14 +212,14 @@
 
       if (v.phase === 'pick') {
         if (v.myPick) h += `<div class="card"><p>${t('mot.yourSecret')} <b style="color:var(--gold)">${word(v.myPick)}</b></p><p class="muted">${t('waitOthers', { a: v.picked, b: v.total })}</p></div>`;
-        else h += `<div class="card"><h2>${t('mot.pickTitle')}</h2><p class="muted">${t('mot.pickHelp')} ${I18N.lang !== 'fr' ? t('mot.frNote') : ''}</p>
-          <div class="choices" lang="fr">${v.myWords.map((w) => `<button class="chip" data-pick="${esc(w.w)}" ${w.used ? 'disabled' : ''}>${esc(w.w)}</button>`).join('')}</div></div>`;
+        else h += `<div class="card"><h2>${t('mot.pickTitle')}</h2><p class="muted">${t('mot.pickHelp')}</p>${langNote}
+          <div class="choices" lang="${v.lang}">${v.myWords.map((w) => `<button class="chip" data-pick="${esc(w.w)}" ${w.used ? 'disabled' : ''}>${esc(w.w)}</button>`).join('')}</div></div>`;
       }
 
       if (v.phase === 'hint') {
         if (v.isGiver) {
           h += `<div class="card"><p>${t('mot.yourSecret')} <b style="color:var(--gold);font-size:1.2rem">${word(v.mySecret)}</b></p>
-            <form id="hintForm" class="row"><input type="text" id="hintIn" class="grow" placeholder="${esc(t('mot.hintPh'))}" autocomplete="off" autocapitalize="off" maxlength="30" lang="fr" dir="ltr">
+            <form id="hintForm" class="row"><input type="text" id="hintIn" class="grow" placeholder="${esc(t('mot.hintPh'))}" autocomplete="off" autocapitalize="off" maxlength="30" lang="${v.lang}" dir="auto">
             <button class="primary">${t('send')}</button></form>
             <p class="muted" style="margin-top:8px">${t('mot.hintCount', { a: v.stageHints, b: v.maxHints })}</p>
             ${v.stageHints ? `<button class="gold block" id="toGuess">${t('mot.toGuess')}</button>` : ''}</div>`;
@@ -227,7 +233,7 @@
         if (v.isGiver) h += `<div class="card"><p>${t('mot.othersSearch', { w: word(v.mySecret) })}</p><p class="muted">${t('mot.answered', { a: v.guessed, b: v.guessTotal })}</p></div>`;
         else if (v.myGuess != null) h += `<div class="card"><p>${t('mot.yourGuess')} <b>${v.myGuess ? word(v.myGuess) : '—'}</b></p><p class="muted">${t('mot.answered', { a: v.guessed, b: v.guessTotal })}</p></div>`;
         else h += `<div class="card"><h2>${t('mot.guessTitle', { n: giverName })}</h2>
-          <form id="guessForm" class="row"><input type="text" id="guessIn" class="grow" placeholder="${esc(t('mot.guessPh'))}" autocomplete="off" autocapitalize="off" maxlength="30" lang="fr" dir="ltr">
+          <form id="guessForm" class="row"><input type="text" id="guessIn" class="grow" placeholder="${esc(t('mot.guessPh'))}" autocomplete="off" autocapitalize="off" maxlength="30" lang="${v.lang}" dir="auto">
           <button class="primary">${t('validate')}</button></form>
           <p class="muted" style="margin-top:8px">${t('mot.guessHelp', { p: v.stage * (v.round === 2 ? 2 : 1) })}</p></div>`;
         if (ui.isHost && v.guessed < v.guessTotal) h += `<button class="small ghost block" id="force" style="margin-top:8px">${t('mot.force')}</button>`;

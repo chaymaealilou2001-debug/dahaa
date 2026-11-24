@@ -160,6 +160,7 @@ function hostHandle(conn, msg) {
 
 function gameCtx() {
   return {
+    lang: I18N.lang,   // langue de l'hôte (utilisée pour les mots du « Mot Secret »)
     now: () => Date.now(),
     after(ms, fn) { const id = setTimeout(() => { timers = timers.filter((x) => x !== id); if (H && H.g) { fn(H.g); broadcast(); } }, ms); timers.push(id); return id; },
     every(ms, fn) { const id = setInterval(() => { if (H && H.g) { if (fn(H.g)) broadcast(); } }, ms); timers.push(id); return id; },

@@ -14,7 +14,7 @@ const INTROS = {
       ['🏆', 'Ils trouvent : ils gagnent. Personne ne trouve : c’est toi qui gagnes !', 'If they find it, they score. If nobody does, you score!', 'إذا وجدوها يربحون. إذا لم يجدها أحد، أنت من يربح!'],
     ],
     more: [
-      ['Les mots du jeu sont en français.', 'The words in this game are in French.', 'كلمات هذه اللعبة بالفرنسية.'],
+      ['Les mots sont dans la langue choisie par l’hôte (celui qui a créé la salle).', 'The words are in the language chosen by the host (who created the room).', 'الكلمات بلغة المضيف (من أنشأ الغرفة).'],
       ['Jusqu’à 5 indices par tentative. Un indice à 95 % ou plus arrête les indices.', 'Up to 5 clues per attempt. A clue at 95% or more stops the clues.', 'حتى 5 تلميحات في كل محاولة. تلميح بنسبة 95% أو أكثر يوقف التلميحات.'],
       ['3 tentatives par joueur : elles valent 1, 2 puis 3 points.', '3 attempts per player: worth 1, 2, then 3 points.', '3 محاولات لكل لاعب: تساوي 1 ثم 2 ثم 3 نقاط.'],
       ['2 manches. Dans la manche 2, tout compte double.', '2 rounds. In round 2, everything counts double.', 'جولتان. في الجولة الثانية تُضاعف كل النقاط.'],

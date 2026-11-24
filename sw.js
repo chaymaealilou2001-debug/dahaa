@@ -1,8 +1,8 @@
 // Service worker : garde l'appli en cache pour qu'elle s'ouvre vite, même avec une connexion faible.
-const CACHE = 'dahaa-v9';
+const CACHE = 'dahaa-v10';
 const SHELL = [
   './', 'index.html', 'css/style.css', 'manifest.webmanifest',
-  'js/core.js', 'js/i18n.js', 'js/words.js', 'js/intros.js', 'js/app.js',
+  'js/core.js', 'js/i18n.js', 'js/words-fr.js', 'js/words-en.js', 'js/words-ar.js', 'js/words.js', 'js/intros.js', 'js/app.js',
   'js/games/mot.js', 'js/games/petit.js', 'js/games/tiens.js',
   'js/games/menteur.js', 'js/games/nitrop.js', 'js/games/degrade.js',
   'js/games/pyramide.js', 'js/games/balance.js', 'js/games/dejavu.js',
