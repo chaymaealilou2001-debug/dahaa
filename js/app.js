@@ -347,9 +347,10 @@ function showHome() {
     if (!$('#name').value.trim()) { toast(t('home.needName')); $('#name').focus(); return null; }
     me.name = n; LS.set('dahaa.name', n); return n;
   };
-  $('#create').onclick = () => { if (getName()) hostCreate(); };
+  const online = () => { if (typeof Peer === 'undefined' || !navigator.onLine) { toast(t('offline.text'), 4000); return false; } return true; };
+  $('#create').onclick = () => { if (getName() && online()) hostCreate(); };
   $('#solo').onclick = () => { if (getName()) soloCreate(); };
-  $('#join').onclick = () => { if (getName()) clientJoin($('#code').value); };
+  $('#join').onclick = () => { if (getName() && online()) clientJoin($('#code').value); };
   $('#code').onkeydown = (e) => { if (e.key === 'Enter') $('#join').click(); };
 }
 
@@ -495,8 +496,5 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
 
-if (typeof Peer === 'undefined') {
-  $('#app').innerHTML = `<div class="topbar"><span></span>${langBtn()}</div><div class="card center" style="margin-top:40px"><h2>${t('offline.title')}</h2><p class="muted">${t('offline.text')}</p><button class="primary" onclick="location.reload()">${t('reload')}</button></div>`;
-} else {
-  showHome();
-}
+// Sans internet, l'écran d'accueil s'ouvre quand même : le mode solo marche hors-ligne.
+showHome();
